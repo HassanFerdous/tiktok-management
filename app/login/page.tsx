@@ -1,7 +1,6 @@
 import Link from "next/link";
 
 export default function Login({ searchParams }: any) {
-	console.log(searchParams);
 	return (
 		<div className="container">
 			<div className="py-10 text-center">

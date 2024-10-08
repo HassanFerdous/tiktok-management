@@ -1,8 +1,8 @@
-"use client";
-
+import CopyButtons, { Tokens } from "@/components/copy-buttons";
 import axios from "axios";
+import { redirect } from "next/navigation";
 
-export default async function Home({ params, searchParams }: any) {
+export default async function Home({ searchParams }: any) {
 	const res = await axios.post(
 		"https://open.tiktokapis.com/v2/oauth/token/",
 		{
@@ -18,8 +18,17 @@ export default async function Home({ params, searchParams }: any) {
 			},
 		}
 	);
-
-	console.log(res);
-
-	return <div className="container py-10">{JSON.stringify(res.data)}</div>;
+	const data = res.data;
+	let tokens: Tokens | null = null;
+	if (data.error) {
+		tokens = null;
+	} else {
+		tokens = data;
+	}
+	if (!tokens) redirect("/login");
+	return (
+		<div className="container py-10 break-words">
+			<CopyButtons tokens={tokens} error={data.error} />
+		</div>
+	);
 }
